@@ -3,6 +3,7 @@ package model;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 
 public class Alice {
 
@@ -16,26 +17,20 @@ public class Alice {
   }
 
   public byte[] getBytes() {
-    // todo: IOException
-    try (ByteArrayOutputStream bis = new ByteArrayOutputStream()) {
-      bis.write(message.getBytes());
-      bis.write(hash);
-      bis.flush(); // todo: yes?
+      byte[] bytes = message.getBytes();
+      ByteBuffer bf = ByteBuffer.allocate(4 + bytes.length);
+      bf.putInt(hash);
+      bf.put(bytes);
 
-      return bis.toByteArray();
-    } catch (IOException e) {
-      logger.error("Unable to convert object into byte array {}", e);
-      return new byte[0];
-    }
+      return bf.array();
   }
 
-  public Alice(byte[] bytes) {
-    ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
+  public Alice(byte[] bytes, int offset, int length) {
+    ByteBuffer bf = ByteBuffer.wrap(bytes, offset, length);
 
-    byte[] msg = new byte[bis.available() - 4];
-
-    bis.read(msg, 0, bis.available() - 4);
-    int msgHash = bis.read();
+    int msgHash = bf.getInt();
+    byte[] msg = new byte[length - 4];
+    bf.get(msg, 0, length - 4);
 
     String message = new String(msg);
     if (message.hashCode() == msgHash) {

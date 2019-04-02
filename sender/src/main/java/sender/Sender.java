@@ -3,6 +3,7 @@ package sender;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import model.Alice;
 
 public class Sender {
   public static void main(String[] args) throws Exception {
@@ -11,7 +12,8 @@ public class Sender {
     DatagramSocket udpSocket = new DatagramSocket();
 
     InetAddress mcIPAddress = InetAddress.getByName(mcIPStr);
-    byte[] msg = "Hello".getBytes();
+    byte[] msg = new Alice("Cat").getBytes();
+//    byte[] msg = "Hello".getBytes();
     DatagramPacket packet = new DatagramPacket(msg, msg.length);
     packet.setAddress(mcIPAddress);
     packet.setPort(mcPort);

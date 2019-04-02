@@ -3,6 +3,7 @@ package receiver;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
+import model.Alice;
 
 public class Receiver {
 
@@ -23,8 +24,8 @@ public class Receiver {
 
     System.out.println("Waiting for a  multicast message...");
     mcSocket.receive(packet);
-    String msg = new String(packet.getData(), packet.getOffset(), packet.getLength());
-    System.out.println("[Multicast  Receiver] Received:" + msg);
+    Alice alice = new Alice(packet.getData(), packet.getOffset(), packet.getLength());
+    System.out.println("[Multicast  Receiver] Received:" + alice.toString());
 
     mcSocket.leaveGroup(mcIPAddress);
     mcSocket.close();
