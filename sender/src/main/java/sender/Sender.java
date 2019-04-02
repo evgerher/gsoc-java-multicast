@@ -44,11 +44,10 @@ public class Sender extends Thread {
 
         if (!udpSocket.isClosed())
           sendPacket(alice);
-        Thread.sleep(10);
+        Thread.sleep(5);
       }
     } catch (InterruptedException e) {
       logger.error("Thread interrupted");
-//      e.printStackTrace();
     }
   }
 

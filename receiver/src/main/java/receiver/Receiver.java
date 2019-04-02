@@ -77,4 +77,10 @@ public class Receiver extends Thread {
       logger.error("Error during group leave [{}]", mcIP); // IOException and KeyException
     }
   }
+
+  public static void main(String[] args) throws Exception {
+    Receiver receiver = new Receiver(20000);
+    receiver.addListenGroup("221.1.1.1");
+    receiver.start();
+  }
 }
