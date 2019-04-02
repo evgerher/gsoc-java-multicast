@@ -4,11 +4,13 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
+import java.net.SocketException;
 import java.util.HashMap;
 import java.util.Map;
 
 import model.Alice;
 
+import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +24,6 @@ public class Receiver extends Thread {
 //    int mcPort = 12345;
     groups = new HashMap<>();
     socket = new MulticastSocket(mcPort);
-
     logger.info("Multicast Receiver running at: {}", socket.getLocalSocketAddress());
   }
 
@@ -45,6 +46,8 @@ public class Receiver extends Thread {
 
       Alice alice = new Alice(packet.getData(), packet.getOffset(), packet.getLength());
       logger.info("Received: {}", alice.toString());
+    } catch (SocketException e) {
+      logger.error("Socket is closed");
     } catch (IOException e) {
       logger.error("Error during packet receiving {}", e);
     }
@@ -53,7 +56,7 @@ public class Receiver extends Thread {
   @Override
   public void run() {
     while (!socket.isClosed()) {
-      logger.debug("Waiting for a  multicast message...");
+      logger.trace("Waiting for a  multicast message...");
       receive();
     }
   }
@@ -67,20 +70,28 @@ public class Receiver extends Thread {
     }
 
     socket.close();
+    logger.info("Stopped listening and closed socket");
   }
 
-  public synchronized void leaveListenGroup(String mcIP) {
+  public synchronized void leaveListenGroup(String group) {
     try {
-      InetAddress address = groups.remove(mcIP);
+      InetAddress address = groups.remove(group);
       socket.leaveGroup(address);
+      logger.info("Left {} group", group);
     } catch (Exception e) {
-      logger.error("Error during group leave [{}]", mcIP); // IOException and KeyException
+      logger.error("Error during group leave [{}]", group); // IOException and KeyException
     }
   }
 
   public static void main(String[] args) throws Exception {
+    String log4jConfPath = "C:\\cygwin64\\home\\evger\\JavaProjects\\multicast-main\\src\\main\\resources\\logger.properties";
+    PropertyConfigurator.configure(log4jConfPath);
+
     Receiver receiver = new Receiver(20000);
-    receiver.addListenGroup("221.1.1.1");
+    receiver.addListenGroup("230.1.1.1");
     receiver.start();
+
+    Thread.sleep(15000);
+    receiver.stopListen();
   }
 }

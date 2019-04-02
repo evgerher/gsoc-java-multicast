@@ -5,6 +5,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import model.Alice;
+import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,7 +45,7 @@ public class Sender extends Thread {
 
         if (!udpSocket.isClosed())
           sendPacket(alice);
-        Thread.sleep(5);
+        Thread.sleep(5000);
       }
     } catch (InterruptedException e) {
       logger.error("Thread interrupted");
@@ -56,8 +57,16 @@ public class Sender extends Thread {
     udpSocket.close();
   }
 
-  public static void main(String[] args) {
-    int mcPort = 12345;
+  public static void main(String[] args) throws Exception {
+    String log4jConfPath = "C:\\cygwin64\\home\\evger\\JavaProjects\\multicast-main\\src\\main\\resources\\logger.properties";
+    PropertyConfigurator.configure(log4jConfPath);
+
+    int mcPort = 20000;
     String mcIPStr = "230.1.1.1";
+
+    Sender sender = new Sender(mcIPStr, mcPort);
+    sender.start();
+    Thread.sleep(20000);
+    sender.close();
   }
 }
