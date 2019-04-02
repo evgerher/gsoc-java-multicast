@@ -14,6 +14,15 @@
     <module>packets</module>
   </modules>
 
+  <properties>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <slf4j.version>1.7.25</slf4j.version>
+    <junit.version>4.12</junit.version>
+  </properties>
+
+
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -23,7 +32,7 @@
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-jdk14</artifactId>
+      <artifactId>slf4j-simple</artifactId>
       <version>${slf4j.version}</version>
     </dependency>
   </dependencies>
