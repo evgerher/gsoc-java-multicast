@@ -9,6 +9,11 @@ import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Class Sender, implements thread-based multicast sender object
+ * Currently sends randomly generated Alice objects
+ *
+ */
 public class Sender extends Thread {
   private static final Logger logger = LoggerFactory.getLogger(Sender.class);
 
@@ -17,6 +22,12 @@ public class Sender extends Thread {
   private final int port;
   private boolean closed;
 
+  /**
+   * Constructor, initalizes udp socket and sets address with port
+   * @param address
+   * @param port
+   * @throws IOException if any
+   */
   public Sender(String address, int port) throws IOException {
     udpSocket = new DatagramSocket();
     this.address = InetAddress.getByName(address);
@@ -24,6 +35,10 @@ public class Sender extends Thread {
     closed = false;
   }
 
+  /**
+   * Method sends an Alice object to the predefined address:port
+   * @param alice
+   */
   private void sendPacket(Alice alice) {
     logger.info("Send packet to {}:{} with content: {}", address.getHostName(), port, alice);
     byte[] bytes = alice.getBytes();
@@ -37,6 +52,10 @@ public class Sender extends Thread {
     }
   }
 
+  /**
+   * Main logic for the thread
+   * Each 5 seconds generates & sends a random Alice object until it is stopped by some external force
+   */
   @Override
   public void run() {
     try {
@@ -52,11 +71,19 @@ public class Sender extends Thread {
     }
   }
 
+  /**
+   * Method ends loop and closes udp socket
+   */
   public void close() {
     closed = true;
     udpSocket.close();
   }
 
+  /**
+   * Example of Sender instance
+   * @param args
+   * @throws Exception
+   */
   public static void main(String[] args) throws Exception {
     String log4jConfPath = "C:\\cygwin64\\home\\evger\\JavaProjects\\multicast-main\\src\\main\\resources\\logger.properties";
     PropertyConfigurator.configure(log4jConfPath);

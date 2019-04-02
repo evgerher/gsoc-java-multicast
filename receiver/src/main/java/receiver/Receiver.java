@@ -14,21 +14,34 @@ import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Class Receiver, implements thread-based multicast receiver
+ * Can be manually configured through another thread through reference to the object (example not provided).
+ */
 public class Receiver extends Thread {
   private static final Logger logger = LoggerFactory.getLogger(Receiver.class);
 
   private final MulticastSocket socket;
   private final Map<String, InetAddress> groups;
 
+  /**
+   * Constructor for Receiver object
+   * Initializes groups map and socket itself
+   * @param mcPort
+   * @throws IOException
+   */
   public Receiver(int mcPort) throws IOException {
-//    int mcPort = 12345;
     groups = new HashMap<>();
     socket = new MulticastSocket(mcPort);
     logger.info("Multicast Receiver running at: {}", socket.getLocalSocketAddress());
   }
 
+  /**
+   * Method adds a new group to listen through socket
+   * Such system is expected to instantiated and controlled from main thread, so it can be manually configured
+   * @param mcIP
+   */
   public synchronized void addListenGroup(String mcIP) {
-//    String mcIPStr = "230.1.1.1";
     try { // todo: can be added multicast ip checker
       InetAddress address = InetAddress.getByName(mcIP);
       socket.joinGroup(address);
@@ -39,6 +52,9 @@ public class Receiver extends Thread {
     }
   }
 
+  /**
+   * Blocking method that receives a packet, transforms into Alice object and logs about it
+   */
   private void receive() {
     try {
       DatagramPacket packet = new DatagramPacket(new byte[1024], 1024);
@@ -61,6 +77,9 @@ public class Receiver extends Thread {
     }
   }
 
+  /**
+   * Method removes all listen groups and closes socket
+   */
   public synchronized void stopListen() {
     try {
       for (InetAddress address: groups.values())
@@ -73,6 +92,11 @@ public class Receiver extends Thread {
     logger.info("Stopped listening and closed socket");
   }
 
+  /**
+   * Method remove `group` from listening addresses.
+   * Such system is expected to instantiated and controlled from main thread, so it can be manually configured
+   * @param group
+   */
   public synchronized void leaveListenGroup(String group) {
     try {
       InetAddress address = groups.remove(group);
@@ -83,6 +107,11 @@ public class Receiver extends Thread {
     }
   }
 
+  /**
+   * Example for receiver instance
+   * @param args
+   * @throws Exception
+   */
   public static void main(String[] args) throws Exception {
     String log4jConfPath = "C:\\cygwin64\\home\\evger\\JavaProjects\\multicast-main\\src\\main\\resources\\logger.properties";
     PropertyConfigurator.configure(log4jConfPath);

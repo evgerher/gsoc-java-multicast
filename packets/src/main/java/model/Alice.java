@@ -3,6 +3,9 @@ package model;
 import java.nio.ByteBuffer;
 import java.util.Random;
 
+/**
+ * Class Alice, represents class instance of random length with a string and its hash
+ */
 public class Alice {
 
   private final String message;
@@ -15,6 +18,10 @@ public class Alice {
     this.hash = message.hashCode();
   }
 
+  /**
+   * Method converts Alice instance into byte array
+   * @return
+   */
   public byte[] getBytes() {
       byte[] bytes = message.getBytes();
       ByteBuffer bf = ByteBuffer.allocate(4 + bytes.length);
@@ -24,6 +31,12 @@ public class Alice {
       return bf.array();
   }
 
+  /**
+   * Alice constructor from udp datagram
+   * @param bytes
+   * @param offset
+   * @param length
+   */
   public Alice(byte[] bytes, int offset, int length) {
     ByteBuffer bf = ByteBuffer.wrap(bytes, offset, length);
 
@@ -46,6 +59,10 @@ public class Alice {
     return message;
   }
 
+  /**
+   * Generate random Alice object (string of length [5;20])
+   * @return
+   */
   public static Alice generate() {
     int leftLimit = 97; // letter 'a'
     int rightLimit = 122; // letter 'z'
