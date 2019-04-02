@@ -15,10 +15,6 @@
     <dependency>
       <groupId>multicast</groupId>
       <artifactId>packets</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>multicast</groupId>
-      <artifactId>packets</artifactId>
       <version>1.0-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
