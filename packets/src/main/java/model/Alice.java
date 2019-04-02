@@ -4,12 +4,14 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.Random;
 
 public class Alice {
 
   private final String message;
   private final Integer hash;
   private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(Alice.class);
+  private static final Random random = new Random();
 
   public Alice(String message) {
     this.message = message;
@@ -45,5 +47,20 @@ public class Alice {
   @Override
   public String toString() {
     return message;
+  }
+
+  public static Alice generate() {
+    int leftLimit = 97; // letter 'a'
+    int rightLimit = 122; // letter 'z'
+    int targetStringLength = random.nextInt(15) + 5; // [5, 20]
+    StringBuilder buffer = new StringBuilder(targetStringLength);
+    for (int i = 0; i < targetStringLength; i++) {
+      int randomLimitedInt = leftLimit + (int)
+          (random.nextFloat() * (rightLimit - leftLimit + 1));
+      buffer.append((char) randomLimitedInt);
+    }
+    String generatedString = buffer.toString();
+
+    return new Alice(generatedString);
   }
 }

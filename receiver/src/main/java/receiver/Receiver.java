@@ -20,7 +20,6 @@ public class Receiver extends Thread {
 
   public Receiver(int mcPort) throws IOException {
 //    int mcPort = 12345;
-
     groups = new HashMap<>();
     socket = new MulticastSocket(mcPort);
 
