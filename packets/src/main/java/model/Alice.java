@@ -41,4 +41,9 @@ public class Alice {
       throw new RuntimeException("Packet with losses");
     }
   }
+
+  @Override
+  public String toString() {
+    return message;
+  }
 }
