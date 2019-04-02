@@ -20,6 +20,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <slf4j.version>1.7.25</slf4j.version>
     <junit.version>4.12</junit.version>
+    <main.name></main.name>
   </properties>
 
 
@@ -35,17 +36,18 @@
       <artifactId>slf4j-log4j12</artifactId>
       <version>${slf4j.version}</version>
     </dependency>
-    <!--<dependency>-->
-      <!--<groupId>multicast</groupId>-->
-      <!--<artifactId>sender</artifactId>-->
-      <!--<version>1.0-SNAPSHOT</version>-->
-      <!--<scope>compile</scope>-->
-    <!--</dependency>-->
-    <!--<dependency>-->
-      <!--<groupId>multicast</groupId>-->
-      <!--<artifactId>receiver</artifactId>-->
-      <!--<version>1.0-SNAPSHOT</version>-->
-      <!--<scope>compile</scope>-->
-    <!--</dependency>-->
   </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.2.1</version>
+        <configuration>
+          <mainClass>${main.name}</mainClass>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>

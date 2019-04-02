@@ -85,9 +85,6 @@ public class Sender extends Thread {
    * @throws Exception
    */
   public static void main(String[] args) throws Exception {
-    String log4jConfPath = "C:\\cygwin64\\home\\evger\\JavaProjects\\multicast-main\\src\\main\\resources\\logger.properties";
-    PropertyConfigurator.configure(log4jConfPath);
-
     int mcPort = 20000;
     String mcIPStr = "230.1.1.1";
 

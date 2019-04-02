@@ -19,5 +19,8 @@
     </dependency>
   </dependencies>
 
+  <properties>
+    <main.name>sender.Sender</main.name>
+  </properties>
 
 </project>

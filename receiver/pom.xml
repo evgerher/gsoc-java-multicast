@@ -20,5 +20,8 @@
     </dependency>
   </dependencies>
 
+  <properties>
+    <main.name>receiver.Receiver</main.name>
+  </properties>
 
 </project>
